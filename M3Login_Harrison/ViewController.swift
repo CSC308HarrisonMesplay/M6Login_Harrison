@@ -9,29 +9,29 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    //Implicitly unwrapped optionals(IUO) type!
     @IBOutlet weak var idTextField: UITextField!
     @IBOutlet weak var pwTextField: UITextField!
     
     @IBAction func loginButton(_ sender: Any) {
-        let id = idTextField.text!
-        let pw = pwTextField.text!
-        //id:harrison, pw: 1234
-        
-        if id.isEmpty || pw.isEmpty{
-            resultLabel.text = "Please input ID and Password."
+        guard let id = idTextField.text, !id.isEmpty else{
+            showAlert(message: "Enter your id!")
             return
         }
-        
-        /*
-        if id == "harrison" && pw == "1234"{
-            resultLabel.text = "Login Success!"
-        }else{
-            resultLabel.text = "Login Failed."
+        guard let pw = pwTextField.text, !pw.isEmpty else{
+            showAlert(message: "Enter your password")
+            return
         }
-         */
+        //id:harrison, pw: 1234
         
         resultLabel.text = (id == "harrison" && pw == "1234") ?
         "Login Success!" : "Login Failed."
+    }
+    func showAlert(message: String){
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
     
     
@@ -41,7 +41,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        idTextField.becomeFirstResponder()
+    }
 
 }
 
